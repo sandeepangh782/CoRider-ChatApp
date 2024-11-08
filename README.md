@@ -1,5 +1,4 @@
 # CoRider-ChatApp
-# CoRider-ChatApp
 
 Here's a `README.md` file for your React Native chat application project. This file follows standard conventions, with sections that provide a clear project overview, setup instructions, and a description of key features.
 
