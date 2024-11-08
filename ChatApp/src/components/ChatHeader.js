@@ -1,18 +1,44 @@
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Image, Pressable, Modal } from 'react-native';
+import React, { useState, useRef, useEffect } from 'react';
+import { View, Text, StyleSheet, TouchableOpacity, Image, Pressable, Modal, Animated } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import groupLogo from '../../assets/group_logo.png';
 
 const ChatHeader = ({ from, to }) => {
     const [showMenu, setShowMenu] = useState(false);
+    const fadeAnim = useRef(new Animated.Value(0)).current;
+    const slideAnim = useRef(new Animated.Value(-20)).current; // Slide down from -20px above
 
     const toggleMenu = () => {
-        setShowMenu(!showMenu)
+        setShowMenu((prev) => !prev);
     };
 
     const closeMenu = () => {
-        setShowMenu(false);
+        Animated.timing(fadeAnim, {
+            toValue: 0,
+            duration: 200,
+            useNativeDriver: true,
+        }).start(() => setShowMenu(false));
     };
+
+    useEffect(() => {
+        if (showMenu) {
+            fadeAnim.setValue(0);
+            slideAnim.setValue(-20);
+
+            Animated.parallel([
+                Animated.timing(fadeAnim, {
+                    toValue: 1,
+                    duration: 300,
+                    useNativeDriver: true,
+                }),
+                Animated.timing(slideAnim, {
+                    toValue: 0,
+                    duration: 300,
+                    useNativeDriver: true,
+                })
+            ]).start();
+        }
+    }, [showMenu]);
 
     return (
         <View style={styles.container}>
@@ -56,29 +82,28 @@ const ChatHeader = ({ from, to }) => {
                         style={styles.modalOverlay}
                         onPress={closeMenu} 
                     >
-                        <View style={styles.menu}>
-                            <Pressable 
-                                style={styles.menuItem} 
-                               
-                            >
+                        <Animated.View style={[
+                            styles.menu,
+                            {
+                                opacity: fadeAnim,
+                                transform: [{ translateY: slideAnim }]
+                            }
+                        ]}>
+                            <Pressable style={styles.menuItem}>
                                 <Ionicons name="people-outline" size={24} color="black" />
                                 <Text style={styles.menuItemText}>Members</Text>
                             </Pressable>
 
-                            <Pressable 
-                                style={styles.menuItem}
-                            >
+                            <Pressable style={styles.menuItem}>
                                 <Ionicons name="call-outline" size={24} color="black" />
                                 <Text style={styles.menuItemText}>Share Number</Text>
                             </Pressable>
 
-                            <Pressable 
-                                style={styles.menuItem}
-                            >
+                            <Pressable style={styles.menuItem}>
                                 <Ionicons name="alert-circle-outline" size={24} color="black" />
                                 <Text style={styles.menuItemText}>Report</Text>
                             </Pressable>
-                        </View>
+                        </Animated.View>
                     </Pressable>
                 </Modal>
             </View>
