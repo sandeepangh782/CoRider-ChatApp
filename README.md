@@ -1,12 +1,6 @@
 # CoRider-ChatApp
 
-Here's a `README.md` file for your React Native chat application project. This file follows standard conventions, with sections that provide a clear project overview, setup instructions, and a description of key features.
-
----
-
-# **Hybrid Chat Application**
-
-This is a React Native hybrid chat application that displays real-time chat messages from a server API on both Android and iOS devices. The app loads with the latest messages and allows the user to scroll up to load older messages, with efficient pagination and date separation for an optimal chat experience.
+This is a React Native  chat application that displays real-time chat messages from a server API on both Android and iOS devices. The app loads with the latest messages and allows the user to scroll up to load older messages, with efficient pagination and date separation for an optimal chat experience.
 
 ## **Table of Contents**
 
