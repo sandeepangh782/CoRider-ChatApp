@@ -121,9 +121,9 @@ To ensure efficient data handling, pagination optimization have been implemented
 ### **7. Screenshots and Walkthrough**
 
 Include screenshots of key components such as the chat header, message list, date separator, and message input area.
-![Screenshot of Chat Screen](ChatApp/Docs/IMG_2642.PNG)
-![Screenshot of Chat Screen](ChatApp/Docs/IMG_2643.png)
-![Screenshot of Chat Screen](ChatApp/Docs/IMG_CA73F0CAE66A-1.png)
+![Screenshot of Chat Screen](docs/IMG_2642.PNG)
+![Screenshot of Chat Screen](docs/IMG_2643.PNG)
+![Screenshot of Chat Screen](docs/IMG_CA73F0CAE66A-1.jpeg)
 
 
 For a visual demonstration, refer to the video walkthrough:  
