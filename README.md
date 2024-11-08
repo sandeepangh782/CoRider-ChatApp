@@ -122,11 +122,11 @@ To ensure efficient data handling, pagination optimization have been implemented
 
 Include screenshots of key components such as the chat header, message list, date separator, and message input area.
 
-<img src="Docs/IMG_2642.PNG" alt="Screenshot of Chat Screen" width="500"/>
+<img src="Docs/IMG_2642.PNG" alt="Screenshot of Chat Screen" width="300"/>
 
-<img src="Docs/IMG_2643.PNG" alt="Screenshot of Chat Screen" width="500"/>
+<img src="Docs/IMG_2643.PNG" alt="Screenshot of Chat Screen" width="300"/>
 
-<img src="Docs/IMG_CA73F0CAE66A-1.jpeg" alt="Screenshot of Chat Screen" width="500"/>
+<img src="Docs/IMG_CA73F0CAE66A-1.jpeg" alt="Screenshot of Chat Screen" width="300"/>
 
 
 For a visual demonstration, refer to the video walkthrough:  
