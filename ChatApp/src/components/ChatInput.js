@@ -94,7 +94,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'transparent', // Add a semi-transparent overlay
+    backgroundColor: 'transparent', 
   },
   fileMenu: {
     flexDirection: 'row',
@@ -110,8 +110,8 @@ const styles = StyleSheet.create({
   },
   menuTriangle: {
   position: 'absolute',
-  bottom: -8, // Adjust this value to position the triangle
-  right: 45, // Adjust this value to align with your menu
+  bottom: -8, 
+  right: 45, 
   width: 0,
   height: 0,
   backgroundColor: 'transparent',
@@ -121,7 +121,7 @@ const styles = StyleSheet.create({
   borderTopWidth: 10,
   borderLeftColor: 'transparent',
   borderRightColor: 'transparent',
-  borderTopColor: '#008000', // Same as menu background color
+  borderTopColor: '#008000', 
 },
   menuItem: {
     flexDirection: 'row',
