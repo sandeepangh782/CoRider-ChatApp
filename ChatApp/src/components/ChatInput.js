@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, TextInput, TouchableOpacity, StyleSheet, Modal, Pressable, Text } from 'react-native';
+import { View, TextInput, TouchableOpacity, StyleSheet, Modal, Pressable, KeyboardAvoidingView, Platform } from 'react-native';
 import { MaterialIcons, Ionicons } from '@expo/vector-icons';
 
 const ChatInput = () => {
@@ -14,15 +14,18 @@ const ChatInput = () => {
   };
 
   return (
+    <KeyboardAvoidingView
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      keyboardVerticalOffset={Platform.OS === 'ios' ? 90 : 0}
+      style={styles.keyboardAvoidingView}
+    >
     <View style={styles.container}>
       <View style={styles.inputbox}>
         <TextInput placeholder="Reply to @Rohit Yadav" style={styles.input} />
         <View style={styles.icons}>
-          {/* Attach File Icon */}
           <TouchableOpacity style={styles.icon1} onPress={toggleFileMenu}>
             <MaterialIcons name="attach-file" size={24} color="black" />
           </TouchableOpacity>
-          {/* Send Icon */}
           <TouchableOpacity style={styles.icon2}>
             <MaterialIcons name="send" size={24} color="black" />
           </TouchableOpacity>
@@ -53,6 +56,7 @@ const ChatInput = () => {
         </Pressable>
       </Modal>
     </View>
+    </KeyboardAvoidingView>
   );
 };
 
@@ -61,7 +65,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     padding: 10,
-    paddingBottom: 30,
+    marginHorizontal: 8,
     backgroundColor: '#FAF9F4',
     
   },

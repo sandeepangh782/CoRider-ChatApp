@@ -1,22 +1,35 @@
+// components/DateSeparator.js
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 
 const DateSeparator = ({ date }) => {
   return (
     <View style={styles.container}>
-      <Text style={styles.text}>{date}</Text>
+      <View style={styles.line} />
+      <Text style={styles.dateText}>{date}</Text>
+      <View style={styles.line} />
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    paddingVertical: 10,
+    flexDirection: 'row',
     alignItems: 'center',
+    paddingHorizontal: 16,
+    marginVertical: 32,    
   },
-  text: {
-    fontSize: 12,
-    color: '#888',
+  line: {
+    flex: 1,
+    height: 1,
+    backgroundColor: '#E5E5E5',
+    
+  },
+  dateText: {
+    fontSize: 15,
+    color: '#666',
+    marginHorizontal: 8,
+    paddingHorizontal: 8,
   },
 });
 

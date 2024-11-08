@@ -9,6 +9,7 @@ import { fetchChatMessages } from '../api/ChatApi';
 import ChatHeader from '../components/ChatHeader';
 import ChatMessage from '../components/ChatMessage';
 import ChatInput from '../components/ChatInput';
+import DateSeparator from '../components/DateSeparator';
 
 const ChatScreen = () => {
   const [messages, setMessages] = useState([]);
@@ -26,9 +27,9 @@ const ChatScreen = () => {
         setMessages(data.chats);
         setTripInfo({ from: data.from, to: data.to });
       } 
-    //   else {
-    //     setMessages(prev => [...data.chats, ...prev]);
-    //   }
+      else {
+        setMessages(prev => [...data.chats, ...prev]);
+      }
     } catch (error) {
       console.error(error);
     } finally {
@@ -41,8 +42,42 @@ const ChatScreen = () => {
   }, []);
 
   const handleLoadMore = () => {
-    setPage(prev => prev + 1);
-    loadMessages(page + 1);
+    // setPage(prev => prev + 1);
+    // loadMessages(page + 1);
+  };
+
+  const formatDate = (timestamp) => {
+    const date = new Date(timestamp);
+    const day = date.getDate();
+    const month = date.toLocaleString('default', { month: 'short' }).toUpperCase();
+    const year = date.getFullYear();
+    return `${day} ${month}, ${year}`;
+  };
+  const renderItem = ({ item, index }) => {
+    let showDateSeparator = false;
+    let dateString = formatDate(item.time);
+    
+
+    if (index === messages.length - 1) {
+      showDateSeparator = true;
+    } else {
+      const nextMessage = messages[index + 1];
+      const nextDateString = formatDate(nextMessage.time);
+      
+      if (dateString !== nextDateString) {
+        showDateSeparator = true;
+      }
+    }
+
+    return (
+      <>
+        <ChatMessage 
+          message={item}
+          isSelf={item.sender.self}
+        />
+        {showDateSeparator && <DateSeparator date={dateString} />}
+      </>
+    );
   };
 
   return (
@@ -55,12 +90,7 @@ const ChatScreen = () => {
       <FlatList
         data={messages}
         inverted
-        renderItem={({ item }) => (
-          <ChatMessage 
-            message={item}
-            isSelf={item.sender.self}
-          />
-        )}
+        renderItem={renderItem}
         keyExtractor={item => item.id}
         onEndReached={handleLoadMore}
         onEndReachedThreshold={0.5}
@@ -71,7 +101,6 @@ const ChatScreen = () => {
     </View>
   );
 };
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
