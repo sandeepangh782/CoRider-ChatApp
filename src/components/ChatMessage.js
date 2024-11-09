@@ -1,14 +1,24 @@
 import React from 'react';
 import { View, Text, Image, StyleSheet } from 'react-native';
+import { MaterialIcons } from '@expo/vector-icons';
+
 
 const ChatMessage = ({ message, isSelf }) => {
   return (
     <View style={[styles.container, isSelf ? styles.selfMessage : styles.otherMessage]}>
       {!isSelf && (
-        <Image 
-          source={{ uri: message.sender.image }} 
-          style={styles.avatar}
-        />
+        <View style={styles.avatarContainer}>
+          <Image 
+            source={{ uri: message.sender.image }} 
+            style={styles.avatar}
+          />
+          {message.sender.is_kyc_verified && (
+            <View style={styles.badge}>
+            <MaterialIcons name="verified" size={14} color="#1C63D5" />
+            </View>
+          )}
+        </View>
+       
       )}
       <View style={[styles.messageContent, isSelf ? styles.selfMessageContent : styles.otherMessageContent]}>
         <Text style={[styles.messageText, isSelf ? styles.selfMessageText : styles.otherMessageText]}>{message.message}</Text>
@@ -61,6 +71,11 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: "gray",
   },
+  badge: {
+    position: 'absolute',
+    top: 20,
+    right: 10,
+  }
 });
 
 export default ChatMessage;
