@@ -1,10 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { 
-  View, 
-  FlatList, 
-  StyleSheet, 
-  ActivityIndicator 
-} from 'react-native';
+import { View, FlatList, StyleSheet, ActivityIndicator } from 'react-native';
 import { fetchChatMessages } from '../api/ChatApi';
 import ChatHeader from '../components/ChatHeader';
 import ChatMessage from '../components/ChatMessage';
@@ -18,12 +13,12 @@ const ChatScreen = () => {
   const [loading, setLoading] = useState(false);
   const [tripInfo, setTripInfo] = useState(null);
   const [initialLoading, setInitialLoading] = useState(true);
-  const flatListRef = useRef(null);  
-  const scrollOffset = useRef(0);    
+  const flatListRef = useRef(null);
+  const scrollOffset = useRef(0);
+  const [hasMore, setHasMore] = useState(true);
 
-  const loadMessages = async (pageNum = 0) => {
+  const loadMessages = async (pageNum) => {
     if (loading) return;
-
     setLoading(true);
     try {
       const data = await fetchChatMessages(pageNum);
@@ -32,26 +27,39 @@ const ChatScreen = () => {
         setName(data.name);
         setTripInfo({ from: data.from, to: data.to });
       } else {
-        setMessages(prev => [...data.chats, ...prev]);
+        if (data.chats && data.chats.length > 0) {
+          setMessages(prev => [...prev, ...data.chats]);
+        } else {
+          setHasMore(false); // No more messages to load
+        }
       }
     } catch (error) {
       console.error(error);
+      setHasMore(false);
     } finally {
       setLoading(false);
     }
   };
 
+  // Initial load
   useEffect(() => {
     loadMessages(0);
+    setInitialLoading(false);
   }, []);
 
-  const handleLoadMore = () => {
-    if (!loading) {
-      const nextPage = page + 1;
-      setPage(nextPage);
-      setTimeout(() => loadMessages(nextPage), 500);
+  // Handle pagination
+  useEffect(() => {
+    if (page > 0) {
+      loadMessages(page);
     }
-  };
+  }, [page]);
+
+const handleLoadMore = () => {
+  if (!loading && hasMore) {
+    const nextPage = page + 1;
+    setPage(nextPage);
+  }
+};
 
   const formatDate = (timestamp) => {
     const date = new Date(timestamp);
@@ -64,7 +72,7 @@ const ChatScreen = () => {
   const renderItem = ({ item, index }) => {
     let showDateSeparator = false;
     const dateString = formatDate(item.time);
-
+    
     if (index === messages.length - 1) {
       showDateSeparator = true;
     } else {
@@ -77,10 +85,7 @@ const ChatScreen = () => {
 
     return (
       <>
-        <ChatMessage 
-          message={item}
-          isSelf={item.sender.self}
-        />
+        <ChatMessage message={item} isSelf={item.sender.self} />
         {showDateSeparator && <DateSeparator date={dateString} />}
       </>
     );
@@ -88,18 +93,21 @@ const ChatScreen = () => {
 
   const handleScroll = (event) => {
     const offsetY = event.nativeEvent.contentOffset.y;
-    scrollOffset.current = offsetY; 
+    scrollOffset.current = offsetY;
   };
 
   const restoreScrollPosition = () => {
     if (flatListRef.current) {
-      flatListRef.current.scrollToOffset({ offset: scrollOffset.current, animated: false });
+      flatListRef.current.scrollToOffset({
+        offset: scrollOffset.current,
+        animated: false
+      });
     }
   };
 
   useEffect(() => {
     if (!initialLoading && !loading) {
-      restoreScrollPosition(); 
+      restoreScrollPosition();
     }
   }, [messages]);
 
@@ -107,21 +115,25 @@ const ChatScreen = () => {
     <View style={styles.container}>
       <ChatHeader 
         from={tripInfo?.from} 
-        to={tripInfo?.to}
-        name={name}
+        to={tripInfo?.to} 
+        name={name} 
       />
-      <FlatList
-        ref={flatListRef}  
-        data={messages}
-        inverted
-        renderItem={renderItem}
-        keyExtractor={item => item.id}
-        onEndReached={handleLoadMore}
-        onEndReachedThreshold={0.2} 
-        ListFooterComponent={loading ? <ActivityIndicator /> : null}
-        onScroll={handleScroll} 
-      />
-      
+<FlatList
+  ref={flatListRef}
+  data={messages}
+  inverted
+  renderItem={renderItem}
+  keyExtractor={item => item.id}
+  onEndReached={handleLoadMore}
+  onEndReachedThreshold={0.2}
+  ListFooterComponent={
+    loading ? (
+      <ActivityIndicator size="small" color="#1C63D5" style={styles.loader} />
+    ) : null
+  }
+  onScroll={handleScroll}
+  refreshing={loading}
+/>
       <ChatInput />
     </View>
   );
@@ -131,6 +143,9 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#FAF9F4',
+  },
+  loader: {
+    padding: 10,
   },
 });
 
