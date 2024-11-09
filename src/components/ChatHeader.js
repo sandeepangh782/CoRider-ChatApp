@@ -3,10 +3,10 @@ import { View, Text, StyleSheet, TouchableOpacity, Image, Pressable, Modal, Anim
 import { Ionicons } from '@expo/vector-icons';
 import groupLogo from '../../assets/group_logo.png';
 
-const ChatHeader = ({ from, to }) => {
+const ChatHeader = ({ from, to, name }) => {
     const [showMenu, setShowMenu] = useState(false);
     const fadeAnim = useRef(new Animated.Value(0)).current;
-    const slideAnim = useRef(new Animated.Value(-20)).current; // Slide down from -20px above
+    const slideAnim = useRef(new Animated.Value(-20)).current; 
 
     const toggleMenu = () => {
         setShowMenu((prev) => !prev);
@@ -47,7 +47,7 @@ const ChatHeader = ({ from, to }) => {
                     <TouchableOpacity style={styles.backButton}>
                         <Ionicons name="arrow-back" size={24} color="black" />
                     </TouchableOpacity>
-                    <Text style={styles.title}>Trip 1</Text>
+                    <Text style={styles.title}>{name}</Text>
                 </View>
                 <TouchableOpacity>
                     <Ionicons name="create-outline" size={24} color="black" />

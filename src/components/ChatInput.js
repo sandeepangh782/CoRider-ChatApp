@@ -7,7 +7,7 @@ import * as DocumentPicker from 'expo-document-picker';
 const ChatInput = () => {
   const [showFileMenu, setShowFileMenu] = useState(false);
   const fadeAnim = useRef(new Animated.Value(0)).current;
-  const slideAnim = useRef(new Animated.Value(20)).current; // Slide up from 20px below
+  const slideAnim = useRef(new Animated.Value(20)).current; 
 
   const toggleFileMenu = () => {
     setShowFileMenu((prevState) => !prevState);
@@ -30,7 +30,7 @@ const ChatInput = () => {
 
     const result = await ImagePicker.launchCameraAsync();
     if (!result.cancelled) {
-      console.log("Camera result:", result.uri); // Process the image URI as needed
+      console.log("Camera result:", result.uri);
     }
     closeFileMenu();
   };
@@ -44,7 +44,7 @@ const ChatInput = () => {
 
     const result = await ImagePicker.launchCameraAsync({ mediaTypes: ImagePicker.MediaTypeOptions.Videos });
     if (!result.cancelled) {
-      console.log("Video result:", result.uri); // Process the video URI as needed
+      console.log("Video result:", result.uri); 
     }
     closeFileMenu();
   };
@@ -52,7 +52,7 @@ const ChatInput = () => {
   const openDocumentPicker = async () => {
     const result = await DocumentPicker.getDocumentAsync();
     if (result.type === "success") {
-      console.log("Document selected:", result.uri); // Process the file URI as needed
+      console.log("Document selected:", result.uri); 
     }
     closeFileMenu();
   };

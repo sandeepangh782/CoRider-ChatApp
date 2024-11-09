@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { 
   View, 
   FlatList, 
@@ -14,20 +14,24 @@ import DateSeparator from '../components/DateSeparator';
 const ChatScreen = () => {
   const [messages, setMessages] = useState([]);
   const [page, setPage] = useState(0);
+  const [name, setName] = useState([]);
   const [loading, setLoading] = useState(false);
   const [tripInfo, setTripInfo] = useState(null);
+  const [initialLoading, setInitialLoading] = useState(true);
+  const flatListRef = useRef(null);  
+  const scrollOffset = useRef(0);    
 
   const loadMessages = async (pageNum = 0) => {
     if (loading) return;
-    
+
     setLoading(true);
     try {
       const data = await fetchChatMessages(pageNum);
       if (pageNum === 0) {
         setMessages(data.chats);
+        setName(data.name);
         setTripInfo({ from: data.from, to: data.to });
-      } 
-      else {
+      } else {
         setMessages(prev => [...data.chats, ...prev]);
       }
     } catch (error) {
@@ -38,12 +42,15 @@ const ChatScreen = () => {
   };
 
   useEffect(() => {
-    loadMessages();
+    loadMessages(0);
   }, []);
 
   const handleLoadMore = () => {
-    // setPage(prev => prev + 1);
-    // loadMessages(page + 1);
+    if (!loading) {
+      const nextPage = page + 1;
+      setPage(nextPage);
+      setTimeout(() => loadMessages(nextPage), 500);
+    }
   };
 
   const formatDate = (timestamp) => {
@@ -53,17 +60,16 @@ const ChatScreen = () => {
     const year = date.getFullYear();
     return `${day} ${month}, ${year}`;
   };
+
   const renderItem = ({ item, index }) => {
     let showDateSeparator = false;
-    let dateString = formatDate(item.time);
-    
+    const dateString = formatDate(item.time);
 
     if (index === messages.length - 1) {
       showDateSeparator = true;
     } else {
       const nextMessage = messages[index + 1];
       const nextDateString = formatDate(nextMessage.time);
-      
       if (dateString !== nextDateString) {
         showDateSeparator = true;
       }
@@ -80,27 +86,47 @@ const ChatScreen = () => {
     );
   };
 
+  const handleScroll = (event) => {
+    const offsetY = event.nativeEvent.contentOffset.y;
+    scrollOffset.current = offsetY; 
+  };
+
+  const restoreScrollPosition = () => {
+    if (flatListRef.current) {
+      flatListRef.current.scrollToOffset({ offset: scrollOffset.current, animated: false });
+    }
+  };
+
+  useEffect(() => {
+    if (!initialLoading && !loading) {
+      restoreScrollPosition(); 
+    }
+  }, [messages]);
+
   return (
     <View style={styles.container}>
       <ChatHeader 
         from={tripInfo?.from} 
         to={tripInfo?.to}
+        name={name}
       />
-      
       <FlatList
+        ref={flatListRef}  
         data={messages}
         inverted
         renderItem={renderItem}
         keyExtractor={item => item.id}
         onEndReached={handleLoadMore}
-        onEndReachedThreshold={0.5}
+        onEndReachedThreshold={0.2} 
         ListFooterComponent={loading ? <ActivityIndicator /> : null}
+        onScroll={handleScroll} 
       />
       
       <ChatInput />
     </View>
   );
 };
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,

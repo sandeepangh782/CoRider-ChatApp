@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { memo } from 'react';
 import { View, Text, Image, StyleSheet } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 
 
-const ChatMessage = ({ message, isSelf }) => {
+const ChatMessage = memo(({ message, isSelf }) => {
   return (
     <View style={[styles.container, isSelf ? styles.selfMessage : styles.otherMessage]}>
       {!isSelf && (
@@ -25,7 +25,7 @@ const ChatMessage = ({ message, isSelf }) => {
       </View>
     </View>
   );
-};
+});
 
 const styles = StyleSheet.create({
   container: {

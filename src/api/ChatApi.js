@@ -1,6 +1,6 @@
 const BASE_URL = 'https://qa.corider.in/assignment';
 
-export const fetchChatMessages = async (page = 0) => {
+export const fetchChatMessages = async (page) => {
   try {
     const response = await fetch(`${BASE_URL}/chat?page=${page}`);
     if (!response.ok) {
