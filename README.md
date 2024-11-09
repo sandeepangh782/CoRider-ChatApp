@@ -130,7 +130,7 @@ Include screenshots of key components such as the chat header, message list, dat
 
 
 For a visual demonstration, refer to the video walkthrough:  
-**Video Link**: [Screencast_Application.MOV](#)
+**Video Link**: [https://drive.google.com/file/d/1sul_ogbbw0VbmH5MCprN250jq_GmWGRm/view?usp=sharing](#)
 
 ---
 
